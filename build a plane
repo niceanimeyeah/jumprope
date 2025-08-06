@@ -1,0 +1,123 @@
+-- Spiral X Hub | Build a Plane Script
+-- YouTube: https://www.youtube.com/@xekeblox
+-- Discord: https://discord.gg/z3fspXcXs9
+
+-- Services
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Player
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+
+-- Rayfield UI Loader
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+-- Window Setup
+local Window = Rayfield:CreateWindow({
+	Name = "Spiral X Hub - Build a Plane",
+	LoadingTitle = "Spiral X Hub",
+	LoadingSubtitle = "by XekeBlox",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "SpiralXHub",
+		FileName = "BuildPlaneConfig"
+	},
+	Discord = {
+		Enabled = true,
+		Invite = "z3fspXcXs9",
+		RememberJoins = true
+	},
+	KeySystem = false
+})
+
+-- Vars
+_G.AutoMoney = false
+_G.AutoBuyStock = false
+_G.SelectedItems = {}
+
+-- Auto Money Tab
+local AutoTab = Window:CreateTab("Auto", 4483362458)
+
+AutoTab:CreateToggle({
+	Name = "Infinite Money Loop",
+	CurrentValue = false,
+	Callback = function(Value)
+		_G.AutoMoney = Value
+		task.spawn(function()
+			while _G.AutoMoney do
+				local Launch = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LaunchEvents"):WaitForChild("Launch")
+				local Return = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LaunchEvents"):WaitForChild("Return")
+
+				Launch:FireServer()
+				task.wait(1)
+				char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(9000000000e9, 9000000000e9, 9000000000e9)
+				task.wait(1)
+				Return:FireServer()
+				task.wait(0.5)
+			end
+		end)
+	end
+})
+
+-- Item list
+local items = {
+	"block_1", "wing_1", "fuel_1", "propeller_1", "seat_1", "fuel_2",
+	"wing_2", "fuel_3", "propeller_2", "balloon", "boost_1",
+	"missile_1", "shield"
+}
+
+AutoTab:CreateMultiDropdown({
+	Name = "Select Stock Items to Auto Buy",
+	Options = items,
+	CurrentOptions = {},
+	Callback = function(Selected)
+		_G.SelectedItems = Selected
+	end
+})
+
+AutoTab:CreateToggle({
+	Name = "Auto Buy Selected Stocks",
+	CurrentValue = false,
+	Callback = function(Value)
+		_G.AutoBuyStock = Value
+		task.spawn(function()
+			while _G.AutoBuyStock do
+				for _, item in ipairs(_G.SelectedItems) do
+					pcall(function()
+						local args = {item}
+						ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("ShopEvents"):WaitForChild("BuyBlock"):FireServer(unpack(args))
+					end)
+				end
+				task.wait(1)
+			end
+		end)
+	end
+})
+
+-- Credits Tab
+local Credits = Window:CreateTab("Credits", 4483362458)
+
+Credits:CreateButton({
+	Name = "Copy YouTube Channel",
+	Callback = function()
+		setclipboard("https://www.youtube.com/@xekeblox")
+		Rayfield:Notify({
+			Title = "Spiral X Hub",
+			Content = "YouTube link copied!",
+			Duration = 3
+		})
+	end
+})
+
+Credits:CreateButton({
+	Name = "Copy Discord Invite",
+	Callback = function()
+		setclipboard("https://discord.gg/z3fspXcXs9")
+		Rayfield:Notify({
+			Title = "Spiral X Hub",
+			Content = "Discord invite copied!",
+			Duration = 3
+		})
+	end
+})
