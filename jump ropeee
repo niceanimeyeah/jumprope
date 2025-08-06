@@ -1,0 +1,153 @@
+--[[ Spiral X Hub v1.2 | Made by XekeBlox ]]
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Spiral X Hub - $1,000,000 Jump Rope",
+    LoadingTitle = "Spiral X Hub Loading...",
+    LoadingSubtitle = "Hang tight, loading script...",
+    KeySystem = true,
+    KeySettings = {
+        Title = "Spiral X Hub Key System",
+        Subtitle = "Enter the Key Below",
+        Note = "Get your key from our Discord server:\ndiscord.gg/z3fspXcXs9",
+        FileName = "SpiralXKey",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = { "spiralxhub2025" }
+    },
+    Discord = {
+        Enabled = true,
+        Invite = "z3fspXcXs9",
+        RememberJoins = true
+    },
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "SpiralXHub",
+        FileName = "Settings"
+    }
+})
+
+--== Tab 1: Main ==--
+local Tab = Window:CreateTab("Main")
+Tab:CreateSection("Win")
+
+Tab:CreateButton({
+    Name = "Instant Win",
+    Callback = function() getWin() end
+})
+
+Tab:CreateButton({
+    Name = "Instant Cash (100K)",
+    Callback = function() getCash() end
+})
+
+Tab:CreateToggle({
+    Name = "Infinite Cash",
+    Flag = "Toggle",
+    CurrentValue = false,
+    Callback = function(val)
+        if val then
+            CashHeart = game:GetService("RunService").Heartbeat:Connect(function()
+                getCash()
+            end)
+        else
+            if CashHeart then CashHeart:Disconnect() end
+        end
+    end
+})
+
+Tab:CreateSection("Frontman")
+Tab:CreateToggle({
+    Name = "Toggle Frontman Morph",
+    Flag = "Toggle",
+    CurrentValue = false,
+    Callback = function(val)
+        getFrontman(val)
+    end
+})
+
+Tab:CreateSection("OP Gear")
+Tab:CreateButton({ Name = "Instant Giant Glove", Callback = function() getSpin("Giant") end })
+Tab:CreateButton({ Name = "Instant Quantum Glove", Callback = function() getSpin("Quantum") end })
+Tab:CreateButton({ Name = "Instant Rainbow Carpet", Callback = function() getSpin("Carpet") end })
+Tab:CreateButton({ Name = "Instant Space Carpet", Callback = function() getSpin("Space") end })
+Tab:CreateButton({ Name = "Instant Rainbow Laser Gun", Callback = function() getSpin("Gun") end })
+
+Tab:CreateSection("Gear")
+Tab:CreateButton({ Name = "Instant Free OP Gear", Callback = function() getGear() end })
+
+--== Tab 2: Misc ==--
+local Tab2 = Window:CreateTab("Misc")
+Tab2:CreateSection("Skip")
+Tab2:CreateButton({
+    Name = "Skip Ahead (Tele)",
+    Callback = function()
+        game.Players.LocalPlayer.Character:PivotTo(workspace.TeleportUp.Prompt:GetPivot() * CFrame.new(0, 3, 0))
+    end
+})
+Tab2:CreateButton({
+    Name = "Spawn Location (Tele)",
+    Callback = function()
+        game.Players.LocalPlayer.Character:PivotTo(workspace.Spawn:GetPivot() * CFrame.new(0, 3, 0))
+    end
+})
+
+Tab2:CreateSection("VIP")
+Tab2:CreateButton({ Name = "Gold Coil (Tele)", Callback = function() game.Players.LocalPlayer.Character:PivotTo(workspace.FreeToolsOfTime.coil:GetPivot()) end })
+Tab2:CreateButton({ Name = "Golden Glove (Tele)", Callback = function() game.Players.LocalPlayer.Character:PivotTo(workspace.FreeToolsOfTime.glove:GetPivot()) end })
+Tab2:CreateButton({ Name = "Lion Morph (Tele)", Callback = function() game.Players.LocalPlayer.Character:PivotTo(workspace.MorphsFolder.Pad_Lion:GetPivot()) end })
+Tab2:CreateButton({ Name = "Gold Woman Morph (Tele)", Callback = function() game.Players.LocalPlayer.Character:PivotTo(workspace.MorphsFolder.Pad_GoldWoman:GetPivot()) end })
+
+Tab2:CreateSection("Glove")
+Tab2:CreateButton({ Name = "Free Guard Glove (Tele)", Callback = function() game.Players.LocalPlayer.Character:PivotTo(workspace.PromptGuardGlove:GetPivot()) end })
+
+--== Tab 3: Credits ==--
+local Tab3 = Window:CreateTab("Credits", 14848261712)
+Tab3:CreateSection("Credits")
+
+Tab3:CreateButton({
+    Name = "YouTube: XekeBlox",
+    Callback = function()
+        setclipboard("https://www.youtube.com/@xekeblox")
+        Rayfield:Notify({
+            Title = "Copied!",
+            Content = "YouTube link copied to clipboard.",
+            Duration = 5,
+            Image = 14848261712
+        })
+    end
+})
+
+Tab3:CreateButton({
+    Name = "Discord Server",
+    Callback = function()
+        setclipboard("https://discord.gg/z3fspXcXs9")
+        Rayfield:Notify({
+            Title = "Copied!",
+            Content = "Discord invite copied to clipboard.",
+            Duration = 5,
+            Image = 14848261712
+        })
+    end
+})
+
+--== Functional Backend ==--
+function getWin()
+    game.ReplicatedStorage.RestartRemotes.Loader:FireServer(false)
+end
+
+function getCash()
+    game.ReplicatedStorage.Spin_Remotes.QuintoPremio:FireServer()
+end
+
+function getSpin(item)
+    game.ReplicatedStorage.CratesUtilities.Remotes.GiveReward:FireServer(item)
+end
+
+function getGear()
+    game.ReplicatedStorage.FreeGear_Remotes.FreeGearEvent:FireServer()
+end
+
+function getFrontman(state)
+    game.ReplicatedStorage.Frontman_Remotes.morph:FireServer("ON")
+end
